@@ -4,7 +4,7 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
+                <div class="flex-shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
                         <x-jet-application-mark class="block h-9 w-auto" />
                     </a>
@@ -16,6 +16,61 @@
                         {{ __('Dashboard') }}
                     </x-jet-nav-link>
                 </div>
+                
+                <!-- Navigation Links For Admin -->
+                @if (Auth::user()->idType_users == 0)
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-jet-nav-link href="{{ route('admin.gestionSalle') }}" :active="request()->routeIs('admin.gestionSalle')">
+                        {{ __('Gestion des salles') }}
+                    </x-jet-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                <x-jet-nav-link href="{{ route('admin.gestionSalle') }}" :active="request()->routeIs('admin.gestionSalle')">
+                        {{ __('Gestion des catégorie') }}
+                    </x-jet-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-jet-nav-link href="{{ route('admin.gestionUser') }}" :active="request()->routeIs('admin.gestionUser')">
+                        {{ __('Gestion des utilisateur') }}
+                    </x-jet-nav-link>
+                </div>
+                @endif
+                <!-- FIN Navigation Links For Admin -->
+                
+                <!-- Navigation Links For Tech -->
+                @if (Auth::user()->idType_users == 1)
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-jet-nav-link href="{{ route('tech.ajoutInfo') }}" :active="request()->routeIs('tech.ajoutInfo')">
+                        {{ __('Ajouter informations aux salles') }}
+                    </x-jet-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-jet-nav-link href="{{ route('admin.gestionSalle') }}" :active="request()->routeIs('admin.gestionSalle')">
+                        {{ __('Prise de vue') }}
+                    </x-jet-nav-link>
+                </div>
+                @endif 
+                <!-- FIN Navigation Links For Tech -->
+
+                <!-- Navigation Links For Gest -->
+                @if (Auth::user()->idType_users == 2)
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-jet-nav-link href="{{ route('gestionPhoto') }}" :active="request()->routeIs('gestionPhoto')">
+                        {{ __('Consulter photos/information') }}
+                    </x-jet-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-jet-nav-link href="{{ route('admin.gestionSalle') }}" :active="request()->routeIs('admin.gestionSalle')">
+                        {{ __('Recherche') }}
+                    </x-jet-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-jet-nav-link href="{{ route('admin.gestionSalle') }}" :active="request()->routeIs('admin.gestionSalle')">
+                        {{ __('Télécharger synthèse') }}
+                    </x-jet-nav-link>
+                </div>
+                @endif
+                <!-- FIN Navigation Links For Gest -->
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ml-6">
@@ -93,11 +148,11 @@
                         <x-slot name="content">
                             <!-- Account Management -->
                             <div class="block px-4 py-2 text-xs text-gray-400">
-                                {{ __('Manage Account') }}
+                                {{ __('Gérer son compte') }}
                             </div>
 
                             <x-jet-dropdown-link href="{{ route('profile.show') }}">
-                                {{ __('Profile') }}
+                                {{ __('Profil') }}
                             </x-jet-dropdown-link>
 
                             @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
@@ -109,12 +164,13 @@
                             <div class="border-t border-gray-100"></div>
 
                             <!-- Authentication -->
-                            <form method="POST" action="{{ route('logout') }}" x-data>
+                            <form method="POST" action="{{ route('logout') }}">
                                 @csrf
 
                                 <x-jet-dropdown-link href="{{ route('logout') }}"
-                                         @click.prevent="$root.submit();">
-                                    {{ __('Log Out') }}
+                                         onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                    {{ __('Se déconnecter') }}
                                 </x-jet-dropdown-link>
                             </form>
                         </x-slot>
@@ -136,17 +192,82 @@
 
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
+        <div class="pt-2 pb-2 space-y-1">
             <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-jet-responsive-nav-link>
         </div>
 
+        <!-- Navigation Links For Admin -->
+        @if (Auth::user()->idType_users == 0)
+        <div class="pt-2 pb-2 space-y-1">
+            <x-jet-responsive-nav-link href="{{ route('admin.gestionSalle') }}" :active="request()->routeIs('admin.gestionSalle')">
+                {{ __('Gestion des salles') }}
+            </x-jet-responsive-nav-link>
+        </div>
+
+        <div class="pt-2 pb-2 space-y-1">
+            <x-jet-responsive-nav-link href="{{ route('admin.gestionSalle') }}" :active="request()->routeIs('admin.gestionSalle')">
+                {{ __('Gestion des catégorie') }}
+            </x-jet-responsive-nav-link>
+        </div>
+
+        <div class="pt-2 pb-2 space-y-1">
+            <x-jet-responsive-nav-link href="{{ route('admin.gestionUser') }}" :active="request()->routeIs('admin.gestionUser')">
+                {{ __('Gestion des utilisateur') }}
+            </x-responsive-jet-nav-link>
+        </div>
+        @endif
+        <!-- FIN Navigation Links For Admin -->
+        
+        <!-- Navigation Links For Tech -->
+        @if (Auth::user()->idType_users == 1)
+        <div class="pt-2 pb-2 space-y-1">
+            <x-jet-responsive-nav-link href="{{ route('tech.ajoutInfo') }}" :active="request()->routeIs('tech.ajoutInfo')">
+                {{ __('Ajouter informations aux salles') }}
+            </x-jet-responsive-nav-link>
+        </div>
+
+        <div class="pt-2 pb-2 space-y-1">
+            <x-jet-responsive-nav-link href="{{ route('admin.gestionSalle') }}" :active="request()->routeIs('admin.gestionSalle')">
+                {{ __('Prise de vue') }}
+            </x-jet-responsive-nav-link>
+        </div>
+
+        @endif 
+        <!-- FIN Navigation Links For Tech -->
+
+        <!-- Navigation Links For Gest -->
+        @if (Auth::user()->idType_users == 2)
+
+        <div class="pt-2 pb-2 space-y-1">
+            <x-jet-responsive-nav-link href="{{ route('gestionPhoto') }}" :active="request()->routeIs('gestionPhoto')">
+                {{ __('Consulter photos/information') }}
+            </x-jet-responsive-nav-link>
+        </div>
+
+
+        <div class="pt-2 pb-2 space-y-1">
+            <x-jet-responsive-nav-link href="{{ route('admin.gestionSalle') }}" :active="request()->routeIs('admin.gestionSalle')">
+                {{ __('Recherche') }}
+            </x-jet-responsive-nav-link>
+        </div>
+
+
+        <div class="pt-2 pb-2 space-y-1">
+            <x-jet-responsive-nav-link href="{{ route('admin.gestionSalle') }}" :active="request()->routeIs('admin.gestionSalle')">
+                {{ __('Télécharger synthèse') }}
+            </x-jet-responsive-nav-link>
+        </div>
+    <div>
+        @endif
+        <!-- FIN Navigation Links For Gest -->
+
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="flex items-center px-4">
                 @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                    <div class="shrink-0 mr-3">
+                    <div class="flex-shrink-0 mr-3">
                         <img class="h-10 w-10 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
                     </div>
                 @endif
@@ -160,7 +281,7 @@
             <div class="mt-3 space-y-1">
                 <!-- Account Management -->
                 <x-jet-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')">
-                    {{ __('Profile') }}
+                    {{ __('Profil') }}
                 </x-jet-responsive-nav-link>
 
                 @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
@@ -170,12 +291,13 @@
                 @endif
 
                 <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}" x-data>
+                <form method="POST" action="{{ route('logout') }}">
                     @csrf
 
                     <x-jet-responsive-nav-link href="{{ route('logout') }}"
-                                   @click.prevent="$root.submit();">
-                        {{ __('Log Out') }}
+                                   onclick="event.preventDefault();
+                                    this.closest('form').submit();">
+                        {{ __('Se déconnecter') }}
                     </x-jet-responsive-nav-link>
                 </form>
 
