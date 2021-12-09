@@ -109,3 +109,26 @@ Route::get('/delete/id/{id}', 'App\Http\Controllers\AdminController@deleteUser'
 | FIN Route Admin
 |--------------------------------------------------------------------------
 */
+
+/*
+|--------------------------------------------------------------------------
+| Route Tech
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['tech'])->group(function() {
+
+//Route vers Ajouter Informations aux salles
+ Route::get('/addinfo', 'App\Http\Controllers\TechController@showSalle' 
+)->name('tech.ajoutInfo');
+
+ //Route pour Ajouter informations dans Informations aux salles
+ Route::get('/addinfo/validate', 'App\Http\Controllers\TechController@addInfo' 
+ )->name('tech.addInfo');
+
+});
+/*
+|--------------------------------------------------------------------------
+| FIN Route Tech
+|--------------------------------------------------------------------------
+*/
