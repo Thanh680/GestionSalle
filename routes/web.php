@@ -132,3 +132,35 @@ Route::middleware(['tech'])->group(function() {
 | FIN Route Tech
 |--------------------------------------------------------------------------
 */
+
+/*
+|--------------------------------------------------------------------------
+| Route Gest
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['gest'])->group(function() {
+
+//Route vers index
+Route::get("/photo", 'App\Http\Controllers\GestController@index' 
+)->name('gestionPhoto');
+
+Route::get("/show", 'App\Http\Controllers\GestController@index' 
+)->name('gest.show');
+
+Route::get("/edit", 'App\Http\Controllers\GestController@index' 
+)->name('gest.edit');
+
+Route::get("/create", function(){
+    return view('gest.create');
+ })->name('gest.create');
+
+ Route::post("/store", 'App\Http\Controllers\GestController@store' 
+)->name('gest.store');
+
+});
+/*
+|--------------------------------------------------------------------------
+| FIN Route Gest
+|--------------------------------------------------------------------------
+*/
