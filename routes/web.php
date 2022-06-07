@@ -52,38 +52,12 @@ Route::get('deleteSalle/id/{id}', 'App\Http\Controllers\AdminController@deleteSa
 Route::get("/salle/search/{batiment}", 'App\Http\Controllers\AdminController@searchBat'
 )->name('admin.searchBat');
 
-//Route pour Importer salle
+//Routes pour Importer salle
 Route::post('/salle', 'App\Http\Controllers\ImportController@parseImport'
 )->name('import_parse');
-
 Route::post('/import_process', 'App\Http\Controllers\ImportController@processImport'
 )->name('import_process');
 
-/*---------------------------------*/
-
-//Route vers Voir photo
-Route::get("/{id}/showPhoto/", 'App\Http\Controllers\AdminController@showPhoto'
-)->name('showPhoto');
-
-//Route pour Ajouter photo
-Route::post("/{id}/showPhoto", 'App\Http\Controllers\AdminController@storePhoto'
-)->name('admin.storePhoto');
-
-//Route pour Supprimer photo
-Route::delete('/photo/{id}', 'App\Http\Controllers\AdminController@destroyPhoto'
-)->name('admin.photo.destroy');
-
-//Route pour Rechercher photo
-Route::get("/showPhotos/{id}", 'App\Http\Controllers\AdminController@searchPhoto'
-)->name('photo.search');
-
-//Route pour Editer photo
-Route::put('updatePhoto/{id}/{fileName}', 'App\Http\Controllers\AdminController@updatePhoto'
-)->name('admin.updatePhoto');
-
-//Route pour Tourner photo
-Route::post('rotatePhoto/{id}/{fileName}', 'App\Http\Controllers\AdminController@orientate'
-)->name('admin.rotate');
 
 /*---------------------------------*/
 
@@ -119,12 +93,13 @@ Route::get('/delete/id/{id}', 'App\Http\Controllers\AdminController@deleteUser'
 Route::middleware(['tech'])->group(function() {
 
 //Route vers Ajouter Informations aux salles
- Route::get('/addinfo', 'App\Http\Controllers\TechController@showSalle' 
-)->name('tech.ajoutInfo');
+ Route::get('/tech/index', 'App\Http\Controllers\TechController@index' 
+ )->name('tech.index');
 
- //Route pour Ajouter informations dans Informations aux salles
- Route::get('/addinfo/validate', 'App\Http\Controllers\TechController@addInfo' 
- )->name('tech.addInfo');
+
+ //Route pour Rechercher salle par batiment
+Route::get("/tech/search/{batiment}", 'App\Http\Controllers\TechController@searchBat'
+)->name('tech.searchBat');
 
 });
 /*
@@ -141,16 +116,18 @@ Route::middleware(['tech'])->group(function() {
 
 Route::middleware(['gest'])->group(function() {
 
-//Route vers index
-Route::get("/photo", 'App\Http\Controllers\GestController@index' 
-)->name('gestionPhoto');
+//Route vers Index
+Route::get('/gest/index', 'App\Http\Controllers\GestController@index' 
+)->name('gest.index');
 
-Route::get("/show", 'App\Http\Controllers\GestController@index' 
-)->name('gest.show');
+//Route pour Rechercher salle par batiment
+Route::get("/gest/search/{batiment}", 'App\Http\Controllers\GestController@searchBat'
+)->name('gest.searchBat');
 
 Route::get("/edit", 'App\Http\Controllers\GestController@index' 
 )->name('gest.edit');
 
+//Route vers la page créer
 Route::get("/create", function(){
     return view('gest.create');
  })->name('gest.create');
@@ -162,5 +139,62 @@ Route::get("/create", function(){
 /*
 |--------------------------------------------------------------------------
 | FIN Route Gest
+|--------------------------------------------------------------------------
+*/
+
+/*
+|--------------------------------------------------------------------------
+| Route Commun
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['user'])->group(function() {
+
+//Route vers Voir photo
+Route::get("/{id}/showPhoto/", 'App\Http\Controllers\CommonController@showPhoto'
+)->name('showPhoto');
+
+//Route pour editer photo
+Route::get("/{id}/editPhoto/{fileName}", 'App\Http\Controllers\CommonController@editSelectedPhoto'
+)->name('editPhoto');
+
+//Route pour Ajouter photo
+Route::post("/{id}/showPhoto", 'App\Http\Controllers\CommonController@storePhoto'
+)->name('storePhoto');
+
+//Route pour Supprimer photo
+Route::delete('/photo/{id}', 'App\Http\Controllers\CommonController@destroyPhoto'
+)->name('photo.destroy');
+
+//Route pour Rechercher photo
+Route::get("/showPhotos/{id}", 'App\Http\Controllers\CommonController@searchPhoto'
+)->name('photo.search');
+
+//Route pour Editer photo
+Route::put('updatePhoto/{id}/{fileName}', 'App\Http\Controllers\CommonController@updatePhoto'
+)->name('updatePhoto');
+
+//Route pour Tourner photo
+Route::post('rotatePhoto/{id}/{fileName}', 'App\Http\Controllers\CommonController@orientate'
+)->name('rotate');
+
+/*---------------------------------*/
+
+ //Route pour Ajouter informations dans Informations aux salles
+ Route::get('/{id}/showInfo/', 'App\Http\Controllers\CommonController@showInfo' 
+ )->name('showInfo');
+
+//Route pour Ajouter Info
+Route::post("/{id}/showInfo/", 'App\Http\Controllers\CommonController@storeInfo'
+)->name('storeInfo');
+
+//Route pour Supprimer photo
+Route::delete('/info/{id}', 'App\Http\Controllers\CommonController@destroyInfo'
+)->name('info.destroy');
+
+});
+
+/*
+|--------------------------------------------------------------------------
+| Route Utilisateur authentifié
 |--------------------------------------------------------------------------
 */

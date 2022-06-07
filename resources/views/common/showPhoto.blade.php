@@ -9,12 +9,11 @@
       <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
       @if (session('status'))
         <h6 class="alert alert-success">{{ session('status') }}</h6>
-    @endif   
+      @endif
+      <x-validation-errors class="mb-4" :errors="$errors"/>
         <div class="block mb-8">
           
-
-          <!-- <a href="{{url('addPhoto/'.$id),}}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg" style="margin-left: 5px;">Ajouter</a> -->
-          
+        @if (Auth::user()->idType_users != 2)  
           <!-- Bouton ouvrir Popup ajouter photo -->
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPhotoModal">
                 Ajouter
@@ -32,7 +31,7 @@
                         <div class="modal-body">
                             <form id="formAddPhoto" enctype="multipart/form-data" method="POST">
                             @csrf
-                            @include('admin.partials.formAddPhoto')
+                            @include('partials.formAddPhoto')
                                 <div class="modal-footer">
                                     <button type="addPhoto" class="btn btn-success" >Ajouter</button>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
@@ -42,9 +41,9 @@
                     </div>
                 </div>
                 </div>
-                
-                <form action="{{ route('photo.search',$id) }}" method="GET" role="search">
                 <!-- END Popup ajouter photo -->
+                @endif 
+              <form action="{{ route('photo.search',$id) }}" method="GET" role="search">
               <input type="text" class="form-control mr-2" name="term" placeholder="Recherche" id="term" style="margin-top: 20px;">
               <span class="input-group-btn mr-5 mt-1">
                 <button class="m-2 p-2 bg-blue-500 hover:bg-blue-700 rounded-lg text-white font-bold" type="submit" title="Recherche">
@@ -73,14 +72,16 @@
             <div class="flex justify-between mt-2 p-1">
               <span class="text-lg">{{ $photo->nom}}</span>
             </div>
+            @if (Auth::user()->idType_users != 2) 
             <div class="flex justify-between mt-2">
-              <a class="m-1 p-2 bg-yellow-500 hover:bg-yellow-700 rounded-lg text-white font-bold" href="{{ route('admin.editPhoto',[$photo->id,$photo->fileName])}}">Modifier</a>
-              <form method="POST" action="{{ route('admin.photo.destroy', $photo->id) }}">
+              <a class="m-1 p-2 bg-yellow-500 hover:bg-yellow-700 rounded-lg text-white font-bold" href="{{ route('editPhoto',[$photo->id,$photo->fileName])}}">Modifier</a>
+              <form method="POST" action="{{ route('photo.destroy', $photo->id) }}" onsubmit="return confirm('Êtes-vous sûrs ?');">
                 @csrf
                 @method('DELETE')
                 <button class="m-1 p-2 rounded-lg bg-red-500 hover:bg-red-700 text-white font-bold">Supprimer</button>  
               </form>
             </div>
+            @endif
           </div>
           @endforeach
         </div>
@@ -103,7 +104,7 @@
         jQuery.ajax({
           type: 'POST',
           method: 'post',
-        url:"{{ route('admin.storePhoto',$id) }}",
+        url:"{{ route('storePhoto',$id) }}",
         data: formData,
         contentType: false,
         processData: false,

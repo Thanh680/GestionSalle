@@ -14,18 +14,19 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class AdminController extends Controller
 {
     // Gestion des salles
-    public function showSalle()
+    public function showSalle() //Afficher le tableau des salles
     {
         $salles = Salle::all();
         return view('admin.gestionSalle', compact('salles'));
     }
 
-    public function addSalle(StoreSalleRequest $request)
+    public function addSalle(StoreSalleRequest $request) //Ajouter une salle à la base de données
     {
         $salles = Salle::create($request->validated());
         return response()->json(['success'=>'Data is successfully added']);
@@ -38,7 +39,7 @@ class AdminController extends Controller
         return compact('salle');
     }
 
-    public function updateSalle(Request $request)
+    public function updateSalle(Request $request) //Enregistrer les modifications d'une salle
     {
         $salle_id = $request->input('id');
         $salle_num = $request->input('num');
@@ -56,17 +57,16 @@ class AdminController extends Controller
         );
         return response()->json(['success'=>'Data is successfully edited']);
     }
-    
-    public function importSalle()
-    {
-        $salles = Salle::paginate();
-        return view('admin.importSalle', compact('salles'));
-    }
 
-    public function deleteSalle($id)
+    public function deleteSalle($id) //Supprimer une salle (avec photos)
     {
         $salle = Salle::where('id','=',$id)->first();
-        $salle->photos()->delete();
+        $photos = Photo::where('idSalle','=',$id)->get();
+        foreach($photos as $photo){
+            if ( File::exists('uploads/photo/'.$photo->fileName)) {
+            File::delete('uploads/photo/'.$photo->fileName);
+            }
+        };
         $salle->delete();
         return redirect()->route('admin.gestionSalle');
     }
@@ -82,111 +82,12 @@ class AdminController extends Controller
         return view('admin.gestionSalle', compact('salles'));
     }
 
-    public function searchBat($batiment)
+    public function searchBat($batiment) //Rechercher salle selon le batiment
     {
         $salles = Salle::where('batiment',$batiment)->orderBy('num')->get();
         return view('admin.gestionSalle', compact('salles'));
     }
 
-    /*---------------------------------*/
-
-    public function showPhoto($id)
-    {
-        $allPhotos = Photo::all();
-        $photos = $allPhotos->where('idSalle','=',$id);
-        return view('admin.showPhoto', compact('id','photos'));
-    }
-
-    public function addPhoto($id)
-    {
-        return view('admin.addPhoto', compact('id'));
-    }
-
-    public function storePhoto(Request $request, $id)
-    {
-        $photo = new Photo;
-        $photo->nom = $request->input('nom');
-        $file = $request->file('image');
-        $extention = $file->getClientOriginalExtension();
-        $filename = time().'.'.$extention;
-        $file->move('uploads/photo/', $filename);
-        $photo->fileName = $filename;
-        $photo->idSalle = $id;
-        
-        $validator = Validator::make($photo->toArray(),[
-            'nom'  => [
-                'required',
-                'max:32'
-            ]
-        ]);
-        
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator);
-        }else{
-            $photo->save();
-        return redirect()->route('showPhoto',$id)->with('status','Image ajouté');
-        }
-    }
-
-    public function destroyPhoto($id)
-    {
-        $photos = Photo::all();
-        $photo = $photos->where('id','=',$id);
-        $photo->each->delete();
-        return redirect()->back();
-    }
-
-    public function searchPhoto(Request $request,$id)
-    {
-        $allPhotos = Photo::all();
-        $photos = $allPhotos->where('idSalle','=',$id);
-        if (request('term')) {
-            $photos = Photo::where([
-                ['idSalle','=',$id],
-                ['nom','like','%'.request('term').'%']
-            ])->get();
-        }
-        return view('admin.showPhoto', compact('id','photos'));
-    }
-
-    public function editSelectedPhoto($id, $fileName)
-    {
-        $photos = Photo::all();
-        $photo = $photos->where('id','=',$id);
-        return view('admin.editPhoto', compact('photo','id','fileName'));
-    }
-
-    public function orientate(Request $request,$id,$fileName)
-    {
-        $photos = Photo::all();
-        $photo = $photos->where('id','=',$id);
-        $img = Image::make('uploads/photo/'.$fileName);
-
-        switch ($request->input('action')) {
-            case 'left':
-                $img->rotate(-90);
-                $img->save();
-                return view('admin.editPhoto', compact('photo','id','fileName'));
-            case 'right':
-                $img->rotate(90);
-                $img->save();
-                return view('admin.editPhoto', compact('photo','id','fileName'));
-        }
-        
-        return view('admin.editPhoto', compact('photo','id','fileName'));
-    }
-
-    public function updatePhoto(Request $request, $id,$fileName)
-    {
-        $photos = Photo::all();
-        $photo = $photos->where('id','=',$id);
-        $photo_nom = $request->input('nom');
-
-        $affected = DB::table('photos')
-              ->where('id', $id)
-              ->update(['nom' => $photo_nom]);
-        return view('admin.editPhoto', compact('photo','id','fileName'));
-    }
 
     // FIN Gestion des salles
 
@@ -235,7 +136,7 @@ class AdminController extends Controller
         return view('admin.editUser', compact('user','id','roles'));
     }
 
-    public function updateUser(Request $request)
+    public function updateUser(StoreUserRequest $request)
     {
         $user_id = $request->input('id');
         $user_name = $request->input('name');

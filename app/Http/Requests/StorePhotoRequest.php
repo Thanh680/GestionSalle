@@ -29,6 +29,7 @@ class StorePhotoRequest extends FormRequest
             ],
             'fileName'     => [
                 'required',
+                'mimes:jpg,bmp,png'
             ]
         ];
     }

@@ -27,7 +27,7 @@
                             <div id="addUser_errList"></div>
                             
                             <form id="formAddUser">
-                            @include('admin.partials.formAddUser')
+                            @include('partials.formAddUser')
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" id="addSubmit">Ajouter</button>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
@@ -105,7 +105,7 @@
                                                 </div>
                                                 <form id="formEditUser">
                                                 <div class="modal-body">
-                                                @include('admin.partials.formEditUser')
+                                                @include('partials.formEditUser')
                                                     </div>
                                                     
                                                         <div class="modal-footer">

@@ -27,9 +27,10 @@ class StoreInfoRequest extends FormRequest
             'libelle' => [
                 'required',
             ],
-            'numSalle'  => [
+            'fileName'     => [
                 'required',
-            ],
+                'mimes:jpg,bmp,png'
+            ]
         ];
     }
 }

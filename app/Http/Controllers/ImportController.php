@@ -59,6 +59,7 @@ class ImportController extends Controller
             $validator = Validator::make($salle->toArray(),[
                 'batiment'     => [
                     'required',
+                    'size:1'
                 ],
                 'etage'    => [
                     'required',
@@ -66,13 +67,15 @@ class ImportController extends Controller
                 ],
                 'num' => [
                     'required',
+                    'numeric'
                 ],
                 'nom'  => [
                     'required',
+                    'string'
                 ],
             ]);
             if ($validator->fails()) {
-                return redirect()->route('importSalle')->withErrors($validator);
+                return redirect()->route('admin.gestionSalle')->withErrors($validator);
             }else{
                 $salle->save();
             }

@@ -4,28 +4,23 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Photo;
+use App\Models\Salle;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StorePhotoRequest;
+use App\Http\Requests\StoreInfoRequest;
 
 class GestController extends Controller
 {
-    public function index()
+    public function index() //Afficher le tableau des salles
     {
-        $photos = Photo::all();
-        return view('gest.index', compact('photos'));
+        $salles = Salle::all();
+        return view('gest.index', compact('salles'));
     }
 
-    public function store(Request $request)
+    public function searchBat($batiment) //Rechercher salle selon le batiment
     {
-        $photo = new Photo;
-        $photo->nom = $request->input('nom');
-        $file = $request->file('image');
-        $extention = $file->getClientOriginalExtension();
-        $filename = time().'.'.$extention;
-        $file->move('uploads/photo/', $filename);
-        $photo->fileName = $filename;
-
-        $photo->save();
-        return redirect()->back()->with('status','Image ajouté');
+        $salles = Salle::where('batiment',$batiment)->orderBy('num')->get();
+        return view('gest.index', compact('salles'));
     }
+
 }

@@ -40,8 +40,8 @@
                 <!-- Navigation Links For Tech -->
                 @if (Auth::user()->idType_users == 1)
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-jet-nav-link href="{{ route('tech.ajoutInfo') }}" :active="request()->routeIs('tech.ajoutInfo')">
-                        {{ __('Ajouter informations aux salles') }}
+                    <x-jet-nav-link href="{{ route('tech.index') }}" :active="request()->routeIs('tech.index')">
+                        {{ __('Consulter photos/information') }}
                     </x-jet-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
@@ -55,13 +55,8 @@
                 <!-- Navigation Links For Gest -->
                 @if (Auth::user()->idType_users == 2)
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-jet-nav-link href="{{ route('gestionPhoto') }}" :active="request()->routeIs('gestionPhoto')">
+                    <x-jet-nav-link href="{{ route('gest.index') }}" :active="request()->routeIs('gest.index')">
                         {{ __('Consulter photos/information') }}
-                    </x-jet-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-jet-nav-link href="{{ route('admin.gestionSalle') }}" :active="request()->routeIs('admin.gestionSalle')">
-                        {{ __('Recherche') }}
                     </x-jet-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
@@ -223,8 +218,8 @@
         <!-- Navigation Links For Tech -->
         @if (Auth::user()->idType_users == 1)
         <div class="pt-2 pb-2 space-y-1">
-            <x-jet-responsive-nav-link href="{{ route('tech.ajoutInfo') }}" :active="request()->routeIs('tech.ajoutInfo')">
-                {{ __('Ajouter informations aux salles') }}
+            <x-jet-responsive-nav-link href="{{ route('tech.index') }}" :active="request()->routeIs('tech.index')">
+                {{ __('Consulter photos/information') }}
             </x-jet-responsive-nav-link>
         </div>
 
@@ -241,18 +236,10 @@
         @if (Auth::user()->idType_users == 2)
 
         <div class="pt-2 pb-2 space-y-1">
-            <x-jet-responsive-nav-link href="{{ route('gestionPhoto') }}" :active="request()->routeIs('gestionPhoto')">
+            <x-jet-responsive-nav-link href="{{ route('gest.index') }}" :active="request()->routeIs('gest.index')">
                 {{ __('Consulter photos/information') }}
             </x-jet-responsive-nav-link>
         </div>
-
-
-        <div class="pt-2 pb-2 space-y-1">
-            <x-jet-responsive-nav-link href="{{ route('admin.gestionSalle') }}" :active="request()->routeIs('admin.gestionSalle')">
-                {{ __('Recherche') }}
-            </x-jet-responsive-nav-link>
-        </div>
-
 
         <div class="pt-2 pb-2 space-y-1">
             <x-jet-responsive-nav-link href="{{ route('admin.gestionSalle') }}" :active="request()->routeIs('admin.gestionSalle')">

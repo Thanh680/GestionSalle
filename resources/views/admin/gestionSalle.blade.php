@@ -8,7 +8,7 @@
     <div class="py-12">
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
             <div class="block mb-8">
-        
+            <x-validation-errors class="mb-4" :errors="$errors"/>
                 <!-- Bouton ouvrir Popup ajouter salle -->
                 <button type="button" class="bg-green-500 hover:bg-green-700 py-2 px-4 text-white rounded" data-bs-toggle="modal" data-bs-target="#addSalleModal">
                 Ajouter
@@ -28,7 +28,7 @@
                             <div id="addSalle_errList"></div>
                             
                             <form id="formAddSalle">
-                            @include('admin.partials.formAddSalle')
+                            @include('partials.formAddSalle')
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" id="addSubmit">Ajouter</button>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
@@ -58,7 +58,7 @@
                         <div class="modal-body">
                             <form id="formImportSalle" enctype="multipart/form-data" method="POST">
                             @csrf
-                            @include('admin.partials.formImportSalle')
+                            @include('partials.formImportSalle')
                                 <div class="modal-footer">
                                     <button type="importSubmit" class="btn btn-primary">Importer</button>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
@@ -82,7 +82,7 @@
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
             <div id="load_tab" class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <!-- Debut Tableau -->
-                @include('admin.partials.tabSalle')
+                @include('partials.tabSalle')
             <!-- FIN Tableau -->
             </div>
         </div>
@@ -124,6 +124,7 @@
     });
     // FIN ajouter une salle
 
+    //Importer une salle
     jQuery(document).on('importSubmit','#formImportSalle',function(e){
         e.preventDefault();
         let formData = new FormData($('#formImportSalle')[0]);
@@ -141,6 +142,7 @@
         processData: false,
         });
     });
+    //FIN importer une salle
     
     });
 </script>

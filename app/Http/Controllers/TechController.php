@@ -8,19 +8,20 @@ use App\Models\User;
 use App\Models\Type_User;
 use App\Models\Option;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Input;
 
 class TechController extends Controller
 {
-    public function showSalle()
+    public function index()
     {
         $salles = Salle::all();
-        return view('tech.ajoutInfo', compact('salles'));
+        return view('tech.index', compact('salles'));
     }
 
-    public function addInfo(StoreInfoRequest $request)
+    public function searchBat($batiment) //Rechercher salle selon le batiment
     {
-        $options = Option::create($request->validated());
-        return redirect(route('tech.ajoutInfo'))->with('success', 'L\'option a bien été ajouté !');
-        ;
+        $salles = Salle::where('batiment',$batiment)->orderBy('num')->get();
+        return view('tech.index', compact('salles'));
     }
 }
